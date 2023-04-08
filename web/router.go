@@ -16,6 +16,7 @@ import (
 )
 
 // 将静态文件嵌入到可执行程序中来
+//
 //go:embed xxqg/build
 var static embed.FS
 
@@ -68,7 +69,7 @@ func RouterInit() *gin.Engine {
 
 	router.POST("/update", check(), func(ctx *gin.Context) {
 		if ctx.GetInt("level") == 1 {
-			update.SelfUpdate("", conf.GetVersion())
+			update.SelfUpdate(conf.GetVersion())
 			ctx.JSON(200, Resp{
 				Code:    200,
 				Message: "",

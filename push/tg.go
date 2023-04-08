@@ -304,7 +304,7 @@ func botUpdate(bot *Telegram, from int64, args []string) {
 		return
 	}
 	bot.SendMsg(from, "即将更新程序！！")
-	update.SelfUpdate("", conf.GetVersion())
+	update.SelfUpdate(conf.GetVersion())
 	bot.SendMsg(from, "更新完成，即将重启程序！")
 	utils.Restart()
 }

@@ -44,7 +44,7 @@ func CheckUpdate(version string) string {
 	}
 	if strings.Contains(latest, "must") {
 		log.Infoln("检测到强制更新，开始强制更新")
-		SelfUpdate("", version)
+		SelfUpdate(version)
 		return ""
 	}
 	if versionCompare(version, latest) {
@@ -160,8 +160,8 @@ func wait() {
 }
 
 // SelfUpdate 自更新
-func SelfUpdate(github string, version string) {
-	github = conf.GetConfig().GithubProxy
+func SelfUpdate(version string) {
+	github := conf.GetConfig().GithubProxy
 	if github == "" {
 		github = "https://github.com"
 	}

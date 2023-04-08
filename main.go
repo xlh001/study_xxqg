@@ -145,7 +145,7 @@ func main() {
 	go update.CheckUpdate(VERSION)
 
 	if u {
-		update.SelfUpdate("", VERSION)
+		update.SelfUpdate(VERSION)
 		log.Infoln("请重启应用")
 		os.Exit(1)
 	}

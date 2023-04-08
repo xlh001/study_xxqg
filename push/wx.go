@@ -381,36 +381,30 @@ func handleGetOpenID(id string, msg string) {
 	sendMsg(id, "你的open_id为"+id)
 }
 
-//
-//  handleCheckUpdate
-//  @Description: 检查更新
-//  @param id
-//
+// handleCheckUpdate
+// @Description: 检查更新
+// @param id
 func handleCheckUpdate(id string, msg string) {
 	about := utils.GetAbout()
 	sendMsg(id, about)
 }
 
-//
-//  handleUpdate
-//  @Description: 开始更新
-//  @param id
-//
+// handleUpdate
+// @Description: 开始更新
+// @param id
 func handleUpdate(id string, msg string) {
 	if conf.GetConfig().Wechat.SuperOpenID != id {
 		sendMsg(id, "请联系管理员处理！")
 		return
 	}
-	update.SelfUpdate("", conf.GetVersion())
+	update.SelfUpdate(conf.GetVersion())
 	sendMsg(id, "检查更新已完成，即将重启程序")
 	utils.Restart()
 }
 
-//
-//  handleRestart
-//  @Description: 重启程序
-//  @param id
-//
+// handleRestart
+// @Description: 重启程序
+// @param id
 func handleRestart(id string, msg string) {
 	if conf.GetConfig().Wechat.SuperOpenID != id {
 		sendMsg(id, "请联系管理员处理！")
@@ -420,12 +414,10 @@ func handleRestart(id string, msg string) {
 	utils.Restart()
 }
 
-//
-//  sendMsg
-//  @Description: 发送消息
-//  @param id
-//  @param message
-//
+// sendMsg
+// @Description: 发送消息
+// @param id
+// @param message
 func sendMsg(id, message string) {
 
 	if wx == nil {
@@ -527,11 +519,9 @@ func HandleWechat(rep http.ResponseWriter, req *http.Request) {
 	wx.ServeHTTP(rep, req)
 }
 
-//
-//  handleLogin
-//  @Description: 用户登录
-//  @param id
-//
+// handleLogin
+// @Description: 用户登录
+// @param id
 func handleLogin(id string, msg string) {
 	core := &lib.Core{Push: func(id1 string, kind, message string) {
 		if kind == "flush" && strings.Contains(message, "login.xuexi.cn") {
@@ -555,11 +545,9 @@ func handleLogin(id string, msg string) {
 	sendMsg(id, "登录成功")
 }
 
-//
-//  handleStartStudy
-//  @Description: 开始学习
-//  @param id
-//
+// handleStartStudy
+// @Description: 开始学习
+// @param id
 func handleStartStudy(id string, msg string) {
 	users, err := model.QueryByPushID(id)
 	if err != nil {
