@@ -63,7 +63,7 @@ jobs:
         id: tag
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::${{ github.ref }}"
+          echo "::set-output name=release_tag::${{ github.ref_name }}"
           echo "::set-output name=status::success"
 
       - name: Upload firmware to release
