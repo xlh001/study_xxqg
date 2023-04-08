@@ -73,13 +73,11 @@ func lastVersion() (string, error) {
 	return gjson.GetBytes(data, "tag_name").Str, nil
 }
 
-//
-//  versionCompare
-//  @Description: 检测是否有更新，有返回true
-//  @param nowVersion
-//  @param lastVersion
-//  @return bool
-//
+// versionCompare
+// @Description: 检测是否有更新，有返回true
+// @param nowVersion
+// @param lastVersion
+// @return bool
 func versionCompare(nowVersion, lastVersion string) bool {
 	nowVersion = strings.ReplaceAll(nowVersion, "must", "beta")
 	lastVersion = strings.ReplaceAll(lastVersion, "must", "beta")
@@ -130,15 +128,15 @@ func binaryName() string {
 	if goarch == "arm" {
 		goarch += "v7"
 	}
-	ext := "tar.gz"
+	ext := ""
 	if runtime.GOOS == "windows" {
-		ext = "zip"
+		ext = "exe"
 	}
 	return fmt.Sprintf("study_xxqg_%v_%v.%v", runtime.GOOS, goarch, ext)
 }
 
 func checksum(github, version string) []byte {
-	sumURL := fmt.Sprintf("%v/sjkhsl/study_xxqg/releases/download/%v/study_xxqg_checksums.txt", github, version)
+	sumURL := fmt.Sprintf("%v/xlh001/study_xxqg/releases/download/%v/study_xxqg_checksums.txt", github, version)
 	response, err := http.Get(sumURL)
 	if err != nil {
 		return nil
@@ -182,7 +180,7 @@ func SelfUpdate(github string, version string) {
 		log.Warnf("获取最新版本失败: %v", err)
 		wait()
 	}
-	url := fmt.Sprintf("%v/sjkhsl/study_xxqg/releases/download/%v/%v", github, latest, binaryName())
+	url := fmt.Sprintf("%v/xlh001/study_xxqg/releases/download/%v/%v", github, latest, binaryName())
 	if version == latest {
 		log.Info("当前版本已经是最新版本!")
 		wait()
