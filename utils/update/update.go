@@ -109,10 +109,7 @@ func versionCompare(nowVersion, lastVersion string) bool {
 			// 对beta后面的数字进行比较
 			nowBetaVersion, _ := strconv.Atoi(strings.TrimLeft(nowMainVersion[1], "beta"))
 			lastBetaVersion, _ := strconv.Atoi(strings.TrimLeft(lastMainVersion[1], "beta"))
-			if nowBetaVersion < lastBetaVersion {
-				return true
-			}
-			return false
+			return nowBetaVersion < lastBetaVersion
 			// 如果当前版本部署beta,需要更新
 		} else {
 			return true

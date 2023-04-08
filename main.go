@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/sjkhsl/study_xxqg/utils/stop"
 	"io"
 	"math/rand"
 	"net/http"
@@ -17,6 +16,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/sjkhsl/study_xxqg/utils/stop"
+
 	"github.com/gin-gonic/gin"
 	rotates "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/robfig/cron/v3"
@@ -28,6 +29,7 @@ import (
 	"github.com/sjkhsl/study_xxqg/conf"
 	"github.com/sjkhsl/study_xxqg/lib/state"
 	"github.com/sjkhsl/study_xxqg/utils"
+
 	// "github.com/sjkhsl/study_xxqg/gui"
 	"github.com/sjkhsl/study_xxqg/lib"
 	"github.com/sjkhsl/study_xxqg/model"
@@ -290,8 +292,6 @@ func do() {
 		s.Wait()
 	}
 	log.Infoln("定时任务执行完成")
-	return
-
 }
 
 func runBack() {
