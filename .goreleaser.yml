@@ -2,11 +2,10 @@
 
 # 设置环境变量
 env:
-  global:
-    - GO111MODULE=on
-    - DOCKER_REGISTRY=docker.io
-    - DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-    - DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
+  - GO111MODULE=on
+  - DOCKER_REGISTRY=docker.io
+  - DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+  - DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
 
 # 添加缓存机制
 cache:
