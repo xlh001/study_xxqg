@@ -7,12 +7,6 @@ env:
   - DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
   - DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
 
-# 添加缓存机制
-cache:
-  directories:
-    - $HOME/.cache/go-build
-    - $HOME/.cache/go-mod
-
 # 在构建之前运行的钩子
 before:
   hooks:
@@ -30,6 +24,12 @@ builds:
     arm: [6, 7, 8]
     env:
       - CGO_ENABLED=0
+      - GO111MODULE=on
+    # 添加缓存机制
+    cache:
+      directories:
+        - $HOME/.cache/go-build
+        - $HOME/.cache/go-mod
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags: ["-trimpath"]
     ldflags: ["-s", "-w", "-X main.VERSION=v{{.Version}}"]
