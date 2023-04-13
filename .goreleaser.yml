@@ -1,7 +1,6 @@
 # .goreleaser.yml
 
 project_name: study_xxqg
-project_dist: dist
 
 env:
   - GO111MODULE=on
