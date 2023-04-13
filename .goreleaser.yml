@@ -110,7 +110,7 @@ nfpms:
       - nowin
       - win
 
-docker:
+dockers:
   - image: xlh001/study_xxqg
     dockerfile: Dockerfile
     context: .
