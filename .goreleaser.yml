@@ -1,10 +1,10 @@
+project_name: study_xxqg
 env:
   - GO111MODULE=on
 before:
   hooks:
     - go mod tidy
 builds:
-
   - id: nowin
     env:
       - CGO_ENABLED=0
@@ -61,10 +61,6 @@ builds:
       - -trimpath
     ldflags:
       - -s -w -X main.VERSION=v{{.Version}}
-
-dockers:
-  image_templates:
-    - xlh001/study_xxqg
 
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
