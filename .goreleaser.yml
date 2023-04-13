@@ -71,14 +71,6 @@ dockers:
   use: buildx
   dockerfile: Dockerfile
 
-# docker_manifests:
-#   name_template: "xlh001/study_xxqg:{{ .Version }}"
-#   image_templates:
-#   - "xlh001/study_xxqg:latest"
-#     - "xlh001/study_xxqg:{{ .Tag }}"
-#     - "xlh001/study_xxqg:{{ .Tag }}-{{ .Env.FOOBAR }}"
-#     - "xlh001/study_xxqg:v{{ .Major }}"
-
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
 changelog:
