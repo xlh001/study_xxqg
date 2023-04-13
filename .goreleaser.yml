@@ -26,23 +26,12 @@ builds:
       - -trimpath
     ldflags:
       - -s -w -X main.VERSION=v{{.Version}}
-
-dockers:
-- image_templates:
-    - "xlh001/study_xxqg:latest"
-    - "xlh001/study_xxqg:{{ .Tag }}"
-    - "xlh001/study_xxqg:{{ .Tag }}-{{ .Env.FOOBAR }}"
-    - "xlh001/study_xxqg:v{{ .Major }}"
-  use: buildx
-  dockerfile: Dockerfile
-
-docker_manifests:
-  - name_template: "xlh001/study_xxqg:{{ .Version }}"
-    image_templates:
-      - "xlh001/study_xxqg:latest"
-      - "xlh001/study_xxqg:{{ .Tag }}"
-      - "xlh001/study_xxqg:{{ .Tag }}-{{ .Env.FOOBAR }}"
-      - "xlh001/study_xxqg:v{{ .Major }}"
+    docker:
+      - image: xlh001/study_xxqg
+        build_context: .
+        tags:
+          - latest
+          - v{{.Version}}
 
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
