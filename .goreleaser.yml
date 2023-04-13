@@ -49,8 +49,9 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags: ["-trimpath"]
     ldflags: ["-s", "-w", "-X main.VERSION=v{{.Version}}"]
-    docker:
+    artifacts:
       - image: xlh001/study_xxqg:{{.Version}}
+        format: docker
         tags: ["latest", "{{.Os}}-{{.Arch}}"]
 
 # 文件校验
