@@ -1,41 +1,65 @@
-# .goreleaser.yml
+# Go应用程序构建和打包配置文件
 
-project_name: study_xxqg
-
+# 设置环境变量
 env:
-  - GO111MODULE=on
+  global:
+    - GO111MODULE=on
+    - DOCKER_REGISTRY=docker.io
+    - DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+    - DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
 
+# 在构建之前运行的钩子
 before:
   hooks:
     - go mod tidy
 
+# 构建配置
 builds:
-  - id: build
+  # 不包含Windows的构建
+  - id: nowin
+    os: [linux, darwin]
+    arch: [386, amd64, arm, arm64]
+    arm: [6, 7, 8]
     env:
       - CGO_ENABLED=0
-      - GO111MODULE=on
-    goos:
-      - linux
-      - darwin
-      - windows
-    goarch:
-      - amd64
-      - arm64
     mod_timestamp: "{{ .CommitTimestamp }}"
-    flags:
-      - -trimpath
-    ldflags:
-      - -s -w -X main.VERSION=v{{.Version}}
-    docker:
-      - image: xlh001/study_xxqg
-        build_context: .
-        tags:
-          - latest
-          - v{{.Version}}
+    flags: ["-trimpath"]
+    ldflags: ["-s", "-w", "-X main.VERSION=v{{.Version}}"]
 
+  # 仅包含Windows的构建
+  - id: win
+    os: [windows]
+    arch: [386, amd64, arm, arm64]
+    arm: [6, 7, 8]
+    env:
+      - CGO_ENABLED=0
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags: ["-trimpath"]
+    ldflags: ["-s", "-w", "-X main.VERSION=v{{.Version}}", "-H=windowsgui"]
+    ignore:
+      - goos: windows
+        goarch: arm
+
+  # Docker镜像构建
+  - id: docker
+    os: [linux, darwin]
+    arch: [amd64, arm64]
+    env:
+      - CGO_ENABLED=0
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags: ["-trimpath"]
+    ldflags: ["-s", "-w", "-X main.VERSION=v{{.Version}}"]
+
+    # Docker镜像tag设置
+    docker:
+      - image: xlh001/study_xxqg:{{.Version}}
+        tags: ["latest", "{{.Os}}-{{.Arch}}"]
+
+# 文件校验
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
 
+# 发布记录
 changelog:
   sort: asc
   filters:
@@ -48,15 +72,26 @@ changelog:
       - Merge remote-tracking
       - go mod tidy
 
+# 打包
 archives:
-  - id: binary
+  # 所有打包格式的配置
+  - id: all
     builds:
-      - build
+      - win
+      - nowin
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    format_overrides:
+    archive_format_overrides:
       - goos: windows
+        goarch: [386, amd64, arm, arm64]
         format: zip
+      - goos: linux
+        goarch: [386, amd64, arm, arm64]
+        format: tar.gz
+      - goos: darwin
+        goarch: [386, amd64, arm, arm64]
+        format: tar.gz
 
+# 发布到NPM
 nfpms:
   - license: AGPL 3.0
     homepage: https://github.com/xlh001/study_xxqg
@@ -66,4 +101,13 @@ nfpms:
       - rpm
     maintainer: johlanse
     builds:
-      - build
+      - nowin
+      - win
+
+# 上传到Docker Hub
+publish:
+  docker:
+    - id: xlh001/study_xxqg
+      username: $DOCKER_USERNAME
+      password: $DOCKER_PASSWORD
+      tag: "{{.Version}}"
