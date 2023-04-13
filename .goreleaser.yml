@@ -1,24 +1,19 @@
 project_name: study_xxqg
 env:
   - GO111MODULE=on
-before:
-  hooks:
-    - go mod tidy
 builds:
-  - id: nowin
-    env:
-      - CGO_ENABLED=0
-      - GO111MODULE=on
+  - binary: study_xxqg
+    ldflags: -s -w -extldflags "-static" -X main.Version={{.Version}} -X main.Commit={{.Commit}} -X main.Date={{.Date}}
     goos:
       - linux
+      - windows
       - darwin
     goarch:
-      - 386
       - amd64
-      - arm
       - arm64
     goarm:
       - 7
+    mod_timestamp: "{{ .CommitTimestamp }}"
     ignore:
       - goos: darwin
         goarch: arm
@@ -26,31 +21,16 @@ builds:
         goarch: 386
       - goos: windows
         goarch: arm
-    mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
       - -trimpath
-    ldflags:
-      - -s -w -X main.VERSION=v{{.Version}}
-  - id: win
     env:
       - CGO_ENABLED=0
-      - GO111MODULE=on
-    goos:
-      - windows
-    goarch:
-      - 386
-      - amd64
-    goarm:
-      - 7
-    mod_timestamp: "{{ .CommitTimestamp }}"
-    flags:
-      - -trimpath
-    ldflags:
-      - -s -w -X main.VERSION=v{{.Version}}
-  - id: docker
-    env:
-      - CGO_ENABLED=0
-      - GO111MODULE=on
+    archive:
+      format: zip
+      name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+      strip_components: 0
+  - binary: study_xxqg
+    ldflags: -s -w -extldflags "-static" -X main.Version={{.Version}} -X main.Commit={{.Commit}} -X main.Date={{.Date}}
     goos:
       - linux
     goarch:
@@ -59,48 +39,60 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
       - -trimpath
-    ldflags:
-      - -s -w -X main.VERSION=v{{.Version}}
-
+    env:
+      - CGO_ENABLED=0
+    image_templates:
+      - name: xlh001/study_xxqg
+        dockerfile: Dockerfile
+        registry: hub.docker.com
+        username:
+          from_secret: ${{ secrets.DOCKERHUB_USERNAME }}
+        password:
+          from_secret: ${{ secrets.DOCKERHUB_TOKEN }}
+        tags:
+          - latest
+          - "{{.Version}}"
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
 changelog:
   sort: asc
   filters:
-    exclude:
-      - "^docs:"
-      - "^test:"
-      - fix typo
-      - Merge pull request
-      - Merge branch
-      - Merge remote-tracking
-      - go mod tidy
-
+    include:
+      - feat
+      - fix
 archives:
   - id: binary
     builds:
-      - win
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    format_overrides:
-      - goos: windows
-        format: binary
-  - id: nowin
+      - linux
+      - windows
+      - darwin
+    format_defaults:
+      format: tar.gz
+  - id: linux
     builds:
-      - nowin
-      - win
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    format_overrides:
-      - goos: windows
-        format: zip
-
+      - linux
+    format_defaults:
+      format: tar.gz
 nfpms:
-  - license: AGPL 3.0
+  - license: MIT
     homepage: https://github.com/xlh001/study_xxqg
-    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    formats:
-      - deb
-      - rpm
-    maintainer: johlanse
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}.{{ .Format }}"
+    maintainer: xlh001
     builds:
-      - nowin
-      - win
+      - linux
+    formats:
+      - rpm
+      - deb
+test:
+  image: golang:1.18
+  commands:
+    - go test -v ./...
+release:
+  github:
+    owner: xlh001
+    repository: study_xxqg
+  draft: false
+  prerelease: false
+  files:
+    - "study_xxqg_*"
+  body: "Release {{.Version}}"
