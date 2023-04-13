@@ -109,11 +109,3 @@ nfpms:
     builds:
       - nowin
       - win
-
-dockers:
-  - image: xlh001/study_xxqg
-    dockerfile: Dockerfile
-    context: .
-    tags:
-      - "latest"
-      - "{{.Version}}"
