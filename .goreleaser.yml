@@ -49,8 +49,6 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags: ["-trimpath"]
     ldflags: ["-s", "-w", "-X main.VERSION=v{{.Version}}"]
-
-    # Docker镜像tag设置
     docker:
       - image: xlh001/study_xxqg:{{.Version}}
         tags: ["latest", "{{.Os}}-{{.Arch}}"]
