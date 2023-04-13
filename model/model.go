@@ -10,7 +10,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/sjkhsl/study_xxqg/utils"
+	"github.com/xlh001/study_xxqg/utils"
 )
 
 var (

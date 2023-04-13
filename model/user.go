@@ -11,7 +11,7 @@ import (
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/sjkhsl/study_xxqg/utils"
+	"github.com/xlh001/study_xxqg/utils"
 )
 
 func init() {

@@ -18,7 +18,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 
-	"github.com/sjkhsl/study_xxqg/conf"
+	"github.com/xlh001/study_xxqg/conf"
 )
 
 // CheckUpdate 检查更新
@@ -48,7 +48,7 @@ func CheckUpdate(version string) string {
 		return ""
 	}
 	if versionCompare(version, latest) {
-		log.Infof("当前有更新的 study_xxqg 可供更新, 请前往 https://github.com/sjkhsl/study_xxqg/releases 下载.")
+		log.Infof("当前有更新的 study_xxqg 可供更新, 请前往 https://github.com/xlh001/study_xxqg/releases 下载.")
 		log.Infof("当前版本: %v 最新版本: %v", version, latest)
 		return "检测到可用更新，版本号：" + latest
 	}
@@ -64,7 +64,7 @@ func readLine() (str string) {
 }
 
 func lastVersion() (string, error) {
-	response, err := http.Get("https://api.github.com/repos/sjkhsl/study_xxqg/releases/latest")
+	response, err := http.Get("https://api.github.com/repos/xlh001/study_xxqg/releases/latest")
 	if err != nil {
 		return "", err
 	}

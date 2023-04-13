@@ -62,6 +62,23 @@ builds:
     ldflags:
       - -s -w -X main.VERSION=v{{.Version}}
 
+dockers:
+  image_templates:
+    - "xlh001/study_xxqg:latest"
+    - "xlh001/study_xxqg:{{ .Tag }}"
+    - "xlh001/study_xxqg:{{ .Tag }}-{{ .Env.FOOBAR }}"
+    - "xlh001/study_xxqg:v{{ .Major }}"
+  use: buildx  
+  dockerfile: Dockerfile
+
+docker_manifests:
+- name_template: "xlh001/study_xxqg:{{ .Version }}"
+  image_templates:
+  - "xlh001/study_xxqg:latest"
+    - "xlh001/study_xxqg:{{ .Tag }}"
+    - "xlh001/study_xxqg:{{ .Tag }}-{{ .Env.FOOBAR }}"
+    - "xlh001/study_xxqg:v{{ .Major }}"
+
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
 changelog:
@@ -95,7 +112,7 @@ archives:
 
 nfpms:
   - license: AGPL 3.0
-    homepage: https://github.com/sjkhsl/study_xxqg
+    homepage: https://github.com/xlh001/study_xxqg
     file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     formats:
       - deb

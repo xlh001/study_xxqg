@@ -1,92 +1,41 @@
 name: CI
+on:
+  push:
+    tags:
+      - '*'
 
-on: [push, pull_request]
-    
-env:
-  BINARY_PREFIX: "study_xxqg_"
-  BINARY_SUFFIX: ""
-  COMMIT_ID: "${{ github.sha }}"
-  PR_PROMPT: "::warning:: Build artifact will not be uploaded due to the workflow is trigged by pull request."
-  LD_FLAGS: "-w -s"
-  UPLOAD_RELEASE: "true"
+permissions:
+  contents: write
 
 jobs:
-  build:
-    name: Build binary CI
+  goreleaser:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # build and publish in parallel: linux/386, linux/amd64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
-        goos: [linux, windows, darwin]
-        goarch: ["386", amd64, arm, arm64]
-        exclude:
-          - goos: darwin
-            goarch: arm
-          - goos: darwin
-            goarch: "386"
-          - goos: windows
-            goarch: arm64
-          - goos: windows
-            goarch: arm
-      fail-fast: true
+    env:
+      DOCKER_CLI_EXPERIMENTAL: "enabled"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Fetch all tags
-        run: git fetch --force --tags
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.18
+          go-version: stable
 
-      - name: Build binary file
-        id: build
-        env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
-          IS_PR: ${{ !!github.head_ref }}
-          CGO_ENABLED: 0
-        run: |
-          if [ $GOOS = "windows" ]; then export BINARY_SUFFIX="$BINARY_SUFFIX.exe"; fi
-          if $IS_PR ; then echo $PR_PROMPT; fi
-          export BINARY_NAME="$BINARY_PREFIX$GOOS_$GOARCH$BINARY_SUFFIX"
-          export LD_FLAGS="-w -s -X main.VERSION=unknown"
-          go mod tidy
-          go build -o "output/$BINARY_NAME" -trimpath -ldflags "$LD_FLAGS" ./
-          echo "FIRMWARE=$PWD/output/*" >> $GITHUB_ENV
-  
-      - name: Generate release tag
-        id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        run: |
-          echo "::set-output name=release_tag::${{ GITHUB_REF#refs/tags/ }}"
-          echo "::set-output name=status::success"
-
-      - name: Upload firmware to release
-        uses: softprops/action-gh-release@v1
-        if: steps.tag.outputs.status == 'success' && !cancelled()
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: ${{ env.FIRMWARE }}
-
-      - name: Delete workflow runs
-        uses: GitRML/delete-workflow-runs@main
-        with:
-          retain_days: 1
-          keep_minimum_runs: 3
-
-      - name: Remove old Releases
-        uses: dev-drprasad/delete-older-releases@v0.1.0
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        with:
-          keep_latest: 5
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

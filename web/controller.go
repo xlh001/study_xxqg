@@ -13,12 +13,12 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/sjkhsl/study_xxqg/conf"
-	"github.com/sjkhsl/study_xxqg/lib"
-	"github.com/sjkhsl/study_xxqg/lib/state"
-	"github.com/sjkhsl/study_xxqg/model"
-	"github.com/sjkhsl/study_xxqg/push"
-	"github.com/sjkhsl/study_xxqg/utils"
+	"github.com/xlh001/study_xxqg/conf"
+	"github.com/xlh001/study_xxqg/lib"
+	"github.com/xlh001/study_xxqg/lib/state"
+	"github.com/xlh001/study_xxqg/model"
+	"github.com/xlh001/study_xxqg/push"
+	"github.com/xlh001/study_xxqg/utils"
 )
 
 // checkToken

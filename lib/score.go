@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 
-	"github.com/sjkhsl/study_xxqg/utils"
+	"github.com/xlh001/study_xxqg/utils"
 )
 
 type Score struct {
