@@ -8,10 +8,19 @@ env:
     - DOCKER_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
     - DOCKER_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}
 
+# 添加缓存机制
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $HOME/.cache/go-mod
+
 # 在构建之前运行的钩子
 before:
   hooks:
     - go mod tidy
+    - go vet ./...
+    - golangci-lint run ./...
+    - go test ./...
 
 # 构建配置
 builds:
