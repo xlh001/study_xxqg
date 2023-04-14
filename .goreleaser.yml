@@ -68,7 +68,12 @@ builds:
       - -s -w -X main.VERSION=v{{.Version}}
 
 dockers:
-- image_templates: ["xlh001/study_xxqg:{{ .Version }}","xlh001/study_xxqg:latest"]
+  image_templates:
+    - "xlh001/study_xxqg:latest"
+    - "xlh001/study_xxqg:{{ .Version }}"
+    - "xlh001/study_xxqg:{{ .Tag }}"
+    - "xlh001/study_xxqg:{{ .Tag }}-{{ .Env.GO_VERSION }}"
+    - "xlh001/study_xxqg:v{{ .Major }}"
   dockerfile: Dockerfile
   build_flag_templates:
   - --label=org.opencontainers.image.title={{ .ProjectName }}
