@@ -68,6 +68,7 @@ builds:
       - -s -w -X main.VERSION=v{{.Version}}
 
 dockers:
+-
   image_templates:
   - "xlh001/study_xxqg:latest"
   - "xlh001/study_xxqg:{{ .Version }}"
