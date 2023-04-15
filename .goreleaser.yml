@@ -86,6 +86,19 @@ dockers:
     extra_files:
       - conf/config_default.yml
       - conf/QuestionBank.db
+    platforms:
+      - linux/amd64
+      - linux/arm/v7
+      - linux/arm64
+      - windows/amd64
+      - windows/arm64
+    tags:
+      - "{{ .Version }}-linux-amd64"
+      - "{{ .Version }}-linux-armv7"
+      - "{{ .Version }}-linux-arm64"
+      - "{{ .Version }}-windows-amd64"
+      - "{{ .Version }}-windows-arm64"
+
 
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
