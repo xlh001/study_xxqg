@@ -84,15 +84,11 @@ dockers:
       - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
       - --label=org.opencontainers.image.revision={{ .FullCommit }}
       - --label=org.opencontainers.image.licenses=MIT
+      - --platform=linux/amd64
+      - --platform=linux/arm64/v8
     extra_files:
       - conf/config_default.yml
       - conf/QuestionBank.db
-    tags:
-      - "{{ .Version }}-linux-amd64"
-      - "{{ .Version }}-linux-armv7"
-      - "{{ .Version }}-linux-arm64"
-      - "{{ .Version }}-windows-amd64"
-      - "{{ .Version }}-windows-arm64"
 
 
 checksum:
