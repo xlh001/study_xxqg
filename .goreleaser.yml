@@ -68,6 +68,7 @@ builds:
 
 dockers:
   - use: buildx
+    platform: linux/amd64,linux/arm/v7,linux/arm64,windows/amd64,windows/arm64
     image_templates:
       - "xlh001/study_xxqg:latest"
       - "xlh001/study_xxqg:{{ .Version }}"
@@ -86,12 +87,6 @@ dockers:
     extra_files:
       - conf/config_default.yml
       - conf/QuestionBank.db
-    platforms:
-      - linux/amd64
-      - linux/arm/v7
-      - linux/arm64
-      - windows/amd64
-      - windows/arm64
     tags:
       - "{{ .Version }}-linux-amd64"
       - "{{ .Version }}-linux-armv7"
