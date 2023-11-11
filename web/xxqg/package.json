@@ -11,7 +11,7 @@
     "@types/react": "17.x",
     "@types/react-dom": "^18.0.1",
     "antd-mobile": "^5.10.2",
-    "axios": "^0.26.1",
+    "axios": "^1.6.0",
     "http-proxy-middleware": "^2.0.5",
     "monaco-editor": "^0.34.0",
     "monaco-yaml": "^4.0.2",
