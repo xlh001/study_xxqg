@@ -96,10 +96,12 @@ func CheckQuestionDB() bool {
 	// 格式化为16进制字符串
 	sha := fmt.Sprintf("%x", h.Sum(nil))
 	log.Infoln("db_sha: " + sha)
-	if sha != dbSum {
+	if sha == dbSum {
+		return true
+	} else {
 		return false
 	}
-	return true
+
 }
 
 /*时间戳->时间对象*/

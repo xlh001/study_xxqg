@@ -569,7 +569,7 @@ func handleStartStudy(id string, msg string) {
 		}
 		sendMsg(id, fmt.Sprintf("开始学习第%d个用户，用户名：%v", i+1, user.Nick))
 		core.LearnArticle(user)
-		core.RadioStation(user)
+		core.LearnVideo(user)
 		if conf.GetConfig().Model == 2 {
 			core.RespondDaily(user, "daily")
 		} else if conf.GetConfig().Model == 3 {

@@ -57,7 +57,7 @@ func study() *grumble.Command {
 				l.Init()
 				defer l.Quit()
 				l.LearnArticle(user)
-				l.RadioStation(user)
+				l.LearnVideo(user)
 				if config.Model == 2 {
 					l.RespondDaily(user, "daily")
 				} else if config.Model == 3 {

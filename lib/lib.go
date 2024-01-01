@@ -23,7 +23,7 @@ func Study(core2 *Core, u *model.User) {
 
 	core2.LearnArticle(u)
 
-	core2.RadioStation(u)
+	core2.LearnVideo(u)
 	if config.Model == 2 {
 		core2.RespondDaily(u, "daily")
 	} else if config.Model == 3 {

@@ -402,7 +402,7 @@ func studyAll(bot *Telegram, from int64, args []string) {
 				core.Init()
 				defer core.Quit()
 				core.LearnArticle(user)
-				core.RadioStation(user)
+				core.LearnVideo(user)
 				core.RespondDaily(user, "daily")
 				// core.RespondDaily(user, "weekly")
 				core.RespondDaily(user, "special")
