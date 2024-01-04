@@ -60,10 +60,11 @@ func (c *Core) RespondDaily(user *model.User, model string) {
 	// 创建浏览器上下文对象
 	context, err := c.browser.NewContext()
 	// 添加一个script,防止被检测
-	_ = context.AddInitScript(playwright.BrowserContextAddInitScriptOptions{
-		Script: playwright.String("Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});")})
+	_ = context.AddInitScript(playwright.Script{
+		Content: playwright.String("Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});")})
 	if err != nil {
 		log.Errorln("创建实例对象错误" + err.Error())
+
 		return
 	}
 	// 在退出方法时关闭对象
@@ -84,7 +85,7 @@ func (c *Core) RespondDaily(user *model.User, model string) {
 		page.Close()
 	}()
 	// 添加用户的cookie
-	err = context.AddCookies(user.ToBrowserCookies()...)
+	err = context.AddCookies(user.ToBrowserCookies())
 	if err != nil {
 		log.Errorln("添加cookie失败" + err.Error())
 		return

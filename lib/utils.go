@@ -28,9 +28,9 @@ func CookieToJar(cookies []Cookie) []*http.Cookie {
 	return cooks
 }
 
-func CookieToParam(cookies []Cookie) []playwright.BrowserContextAddCookiesOptionsCookies {
+func CookieToParam(cookies []Cookie) []playwright.Cookie {
 	var (
-		cooks []playwright.BrowserContextAddCookiesOptionsCookies
+		cooks []playwright.Cookie
 	)
 
 	for _, c := range cookies {
@@ -38,14 +38,14 @@ func CookieToParam(cookies []Cookie) []playwright.BrowserContextAddCookiesOption
 		if c.Name == "acw_tc" || c.Name == "aliyungf_tc" {
 			domain = "iflow-api.xuexi.cn\t"
 		}
-		cooks = append(cooks, playwright.BrowserContextAddCookiesOptionsCookies{
-			Name:     playwright.String(c.Name),
-			Value:    playwright.String(c.Value),
-			Domain:   playwright.String(domain),
-			Path:     playwright.String(c.Path),
-			Expires:  playwright.Float(float64(c.Expires)),
-			HttpOnly: playwright.Bool(c.HTTPOnly),
-			Secure:   playwright.Bool(c.Secure),
+		cooks = append(cooks, playwright.Cookie{
+			Name:     c.Name,
+			Value:    c.Value,
+			Domain:   domain,
+			Path:     c.Path,
+			Expires:  float64(c.Expires),
+			HttpOnly: c.HTTPOnly,
+			Secure:   c.Secure,
 			SameSite: playwright.SameSiteAttributeStrict,
 		})
 	}

@@ -102,6 +102,7 @@ func getLinks(model string) ([]Link, error) {
 
 // 文章学习
 func (c *Core) LearnArticle(user *model.User) {
+
 	defer func() {
 		err := recover()
 		if err != nil {
@@ -123,12 +124,9 @@ func (c *Core) LearnArticle(user *model.User) {
 		log.Infoln("开始加载文章学习模块")
 
 		context, err := c.browser.NewContext(playwright.BrowserNewContextOptions{
-			Viewport: &playwright.BrowserNewContextOptionsViewport{
-				Width:  playwright.Int(1920),
-				Height: playwright.Int(1080),
-			}})
-		_ = context.AddInitScript(playwright.BrowserContextAddInitScriptOptions{
-			Script: playwright.String("Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});")})
+			Viewport: &playwright.Size{Width: 1920, Height: 1080},
+		})
+		_ = context.AddInitScript(playwright.Script{Content: playwright.String("Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});")})
 		if err != nil {
 			log.Errorln("创建实例对象错误" + err.Error())
 			return
@@ -153,7 +151,7 @@ func (c *Core) LearnArticle(user *model.User) {
 			}
 		}()
 
-		err = context.AddCookies(user.ToBrowserCookies()...)
+		err = context.AddCookies(user.ToBrowserCookies())
 		if err != nil {
 			log.Errorln("添加cookie失败" + err.Error())
 			return
@@ -229,19 +227,15 @@ func (c *Core) LearnVideo(user *model.User) {
 		log.Errorln(err.Error())
 		return
 	}
-	links, _ := getLinks("video")
+	links, _ := getLinks("yp")
 	if !(score.Content["video"].CurrentScore >= score.Content["video"].MaxScore && score.Content["video_time"].CurrentScore >= score.Content["video_time"].MaxScore) {
 		log.Infoln("开始加载视频学习模块")
 		// core := Core{}
 		// core.Init()
 
 		context, err := c.browser.NewContext(playwright.BrowserNewContextOptions{
-			Viewport: &playwright.BrowserNewContextOptionsViewport{
-				Width:  playwright.Int(1920),
-				Height: playwright.Int(1080),
-			}})
-		_ = context.AddInitScript(playwright.BrowserContextAddInitScriptOptions{
-			Script: playwright.String("Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});")})
+			Viewport: &playwright.Size{Width: 1920, Height: 1800}})
+		_ = context.AddInitScript(playwright.Script{Content: playwright.String("Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});")})
 		if err != nil {
 			log.Errorln("创建实例对象错误" + err.Error())
 			return
@@ -261,7 +255,7 @@ func (c *Core) LearnVideo(user *model.User) {
 			page.Close()
 		}()
 
-		err = context.AddCookies(user.ToBrowserCookies()...)
+		err = context.AddCookies(user.ToBrowserCookies())
 		if err != nil {
 			log.Errorln("添加cookie失败" + err.Error())
 			return

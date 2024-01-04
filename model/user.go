@@ -209,10 +209,10 @@ func TokenToCookies(token string) []*http.Cookie {
 	return []*http.Cookie{cookie}
 }
 
-func (u *User) ToBrowserCookies() []playwright.BrowserContextAddCookiesOptionsCookies {
-	cookie := playwright.BrowserContextAddCookiesOptionsCookies{
-		Name:     playwright.String("token"),
-		Value:    playwright.String(u.Token),
+func (u *User) ToBrowserCookies() []playwright.OptionalCookie {
+	cookie := playwright.OptionalCookie{
+		Name:     "token",
+		Value:    u.Token,
 		Path:     playwright.String("/"),
 		Domain:   playwright.String(".xuexi.cn"),
 		Expires:  playwright.Float(float64(time.Now().Add(time.Hour * 12).Unix())),
@@ -220,7 +220,7 @@ func (u *User) ToBrowserCookies() []playwright.BrowserContextAddCookiesOptionsCo
 		HttpOnly: playwright.Bool(false),
 		SameSite: playwright.SameSiteAttributeStrict,
 	}
-	return []playwright.BrowserContextAddCookiesOptionsCookies{cookie}
+	return []playwright.OptionalCookie{cookie}
 }
 
 func check() {
